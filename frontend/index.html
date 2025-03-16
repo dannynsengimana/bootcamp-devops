@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DevOps Bootcamp Content</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        h1 { text-align: center; margin-bottom: 30px; }
+        .module-list { list-style: none; padding: 0; }
+        .module-item { background-color: #f9f9f9; border: 1px solid #eee; margin-bottom: 10px; padding: 15px; border-radius: 5px; }
+        .module-item h2 { margin-top: 0; color: #333; }
+        .module-item p { color: #666; }
+        #messageForm { margin-bottom: 20px; display: flex; gap: 10px; }
+        #messageInput { flex-grow: 1; padding: 8px; border: 1px solid #ccc; }
+        #messageForm button { padding: 8px 15px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+        #messages { border: 1px solid #eee; padding: 10px; margin-top: 10px; }
+        #messages p { margin: 5px 0; padding-bottom: 5px; border-bottom: 1px dotted #eee; }
+        #messages p:last-child { border-bottom: none; }
+    </style>
+</head>
+<body>
+    <h1>DevOps Bootcamp Content</h1>
+    <form id="messageForm">
+        <input type="text" id="messageInput" placeholder="Enter a module to add">
+        <button type="submit">Add Module</button>
+    </form>
+    <div id="messages"></div>
+    <ul class="module-list">
+        <li class="module-item">
+            <h2>Module 1: Introduction to DevOps</h2>
+            <p>Understanding the core concepts, principles, and benefits of DevOps. Exploring the DevOps lifecycle and its various phases.</p>
+        </li>
+        <li class="module-item">
+            <h2>Module 2: Version Control with Git</h2>
+            <p>Learning the fundamentals of Git, including branching, merging, and resolving conflicts. Introduction to platforms like GitHub and GitLab.</p>
+        </li>
+        <li class="module-item">
+            <h2>Module 3: Continuous Integration (CI)</h2>
+            <p>Implementing CI pipelines for automated building, testing, and code quality checks. Exploring tools like Jenkins, GitLab CI, and GitHub Actions.</p>
+        </li>
+        <li class="module-item">
+            <h2>Module 4: Continuous Delivery (CD)</h2>
+            <p>Setting up CD pipelines for automated deployment of applications to various environments. Understanding deployment strategies and rollback mechanisms.</p>
+        </li>
+        <li class="module-item">
+            <h2>Module 5: Infrastructure as Code (IaC)</h2>
+            <p>Provisioning and managing infrastructure using code. Introduction to tools like Terraform and Ansible.</p>
+        </li>
+        <li class="module-item">
+            <h2>Module 6: Containerization with Docker</h2>
+            <p>Learning how to containerize applications using Docker. Understanding Dockerfiles, images, and containers.</p>
+        </li>
+        <li class="module-item">
+            <h2>Module 7: Orchestration with Kubernetes</h2>
+            <p>Deploying, scaling, and managing containerized applications using Kubernetes. Understanding Pods, Deployments, Services, and other core Kubernetes concepts.</p>
+        </li>
+        <li class="module-item">
+            <h2>Module 8: Monitoring and Logging</h2>
+            <p>Implementing monitoring and logging solutions to track application and infrastructure performance. Exploring tools like Prometheus, Grafana, and ELK stack.</p>
+        </li>
+        <li class="module-item">
+            <h2>Module 9: Cloud Platforms (Optional)</h2>
+            <p>Introduction to popular cloud platforms like AWS, Azure, or GCP and their DevOps services.</p>
+        </li>
+        <li class="module-item">
+            <h2>Module 10: Security in DevOps (DevSecOps)</h2>
+            <p>Integrating security practices into the DevOps pipeline.</p>
+        </li>
+    </ul>
+    <script>
+        const form = document.getElementById('messageForm');
+        const messagesDiv = document.querySelector('.module-list');
+        const STORAGE_KEY = 'guestbookMessages';
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const message = document.getElementById('messageInput').value;
+            if (message.trim() !== "") {
+                await fetch('/api/modules', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ module: message })
+                });
+                document.getElementById('messageInput').value = '';
+                fetchModules();
+            }
+        });
+
+        async function fetchModules() {
+            const response = await fetch('/api/modules');
+            const modules = await response.json();
+            messagesDiv.innerHTML = modules.map(module => `
+                <li class="module-item">
+                    <h2>${module}</h2>
+                </li>
+            `).join('');
+        }
+
+        fetchModules();
+    </script>
+</body>
+</html>
