@@ -1,9 +1,9 @@
 apiVersion: apps/v1
-kind: Deployment # Changed from ReplicaSet to Deployment
+kind: Deployment
 metadata:
   name: redis-deployment
 spec:
-  replicas: 2 # Added replicas
+  replicas: 2 
   selector:
     matchLabels:
       app: redis
