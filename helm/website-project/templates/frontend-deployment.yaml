@@ -12,10 +12,14 @@ spec:
       labels:
         app: frontend
     spec:
+      dnsPolicy: ClusterFirst
+      dnsConfig:
+        searches:
+          - default.svc.cluster.local
       containers:
       - name: frontend
-        image: dannynsengimana97/ui-app-devopsbootcamp
-        imagePullPolicy: Always
+        image: dannynsengimana97/ui-app-devopsbootcamp1.0.2
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
 ---
@@ -24,7 +28,7 @@ kind: Service
 metadata:
   name: frontend-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: frontend
   ports:
@@ -37,7 +41,7 @@ kind: Ingress
 metadata:
   name: frontend-ingress
 spec:
-  ingressClassName: nginx   
+  ingressClassName: nginx
   rules:
   - http:
       paths:
@@ -48,3 +52,10 @@ spec:
             name: frontend-service
             port:
               number: 80
+      - path: /api/
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-service
+            port:
+              number: 5000

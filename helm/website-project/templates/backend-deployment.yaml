@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
       - name: backend
-        image: dannynsengimana97/core-app-devopsbootcamp
-        imagePullPolicy: Always
+        image: dannynsengimana97/core-app-devopsbootcamp1.0.1
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
         env:
@@ -40,6 +40,7 @@ kind: Service
 metadata:
   name: backend-service
 spec:
+  type: ClusterIP
   selector:
     app: backend
   ports:
